@@ -30,7 +30,7 @@
     <ClInclude Include="Modelo.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="nave.h">
+    <ClInclude Include="Nave.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
