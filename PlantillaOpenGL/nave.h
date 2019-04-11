@@ -13,15 +13,16 @@ public:
 	enum Direccion {Izquierda, Derecha};
 	vec3 coordenadas;
 	float angulo = 0.0f;
-	float velocidadAngular = 0.4f;
-	float xNave = 0.0f;
-	float yNave = 0.0f;
-	float aceleracion = 0.09f;
-	float velocidadNormal = 1.18f;
-	float desaceleracion = 0.05f;
+
+	float velocidadAngular = 100.0f;
+
+	float aceleracion = 0.03f;
+	float desaceleracion = 0.1f;
 
 
-
+	float velocidad = 0.0f;
+	float velocidadNormal = 100.0f;
+	float velocidadMaxima = 150.0f;
 
 	double tiempoAnterior = 0.0f;
 	double tiempoActual = 0.0f;
@@ -32,4 +33,5 @@ public:
 	void actualizarMatrizTransformacion();
 	void naveTiempoDiferencial();
 	void naveRegreso();
+	void desaceleracionNave();
 };

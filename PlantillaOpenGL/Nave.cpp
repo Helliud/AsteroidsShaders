@@ -41,7 +41,17 @@ void Nave::rotar(Direccion direccion) {
 	float rotacion = velocidadAngular;
 
 	if (direccion == Direccion::Derecha) {
-		rotacion = -rotacion;
+		rotacion = -rotacion * tiempoDiferencial;
+		if (rotacion > 360) {
+			rotacion -= 360;
+		}
+	}
+
+	if (direccion == Direccion::Izquierda) {
+		rotacion = +rotacion * tiempoDiferencial;
+		if (rotacion > 0) {
+			rotacion += 360;
+		}
 	}
 	angulo += rotacion;
 
@@ -68,12 +78,17 @@ void Nave::naveRegreso() {
 }
 
 void Nave::avanzar() {
+
+	if (velocidad < velocidadMaxima) {
+		velocidad += aceleracion * tiempoDiferencial;
+	}
+
 	float anguloDesfasado = angulo + 90.0f;
 
 
 	vec3 traslacion = vec3(
-		cos(anguloDesfasado * 3.14159 / 180.0f) * velocidadNormal * tiempoDiferencial , //X
-		sin(anguloDesfasado * 3.14159 / 180.0f) * velocidadNormal * tiempoDiferencial , //Y
+		cos(anguloDesfasado * 3.14159 / 180.0f) * velocidad, //X
+		sin(anguloDesfasado * 3.14159 / 180.0f) * velocidad, //Y
 		0.0f
 	);
 	coordenadas += traslacion;
@@ -87,5 +102,28 @@ void Nave::actualizarMatrizTransformacion() {
 	//Aplicar transformaciones
 	transformaciones = translate(transformaciones, coordenadas);
 	transformaciones = rotate(transformaciones, angulo * 3.14159f / 180.0f, vec3(0.0f, 0.0f, 1.0f));
+}
+
+
+void Nave::desaceleracionNave() {
+
+	velocidad -= aceleracion * tiempoDiferencial;
+	if (velocidad < 0) {
+		velocidad = 0.0f;
+	}
+
+	float anguloDesfasado = angulo + 90.0f;
+
+	vec3 traslacion = vec3(
+		cos(anguloDesfasado * 3.14159 / 180.0f) * velocidad, //x
+		sin(anguloDesfasado * 3.14159 / 180.0f) * velocidad, //y
+		0.0f //z
+	);
+
+	coordenadas += traslacion;
+
+	actualizarMatrizTransformacion();
+
+
 }
 
