@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Nave.h"
 
+
 Nave::Nave() {
 	angulo = 0.0f;
 	coordenadas = vec3(0.0f, 0.0f, 0.0f);
@@ -28,22 +29,51 @@ Nave::Nave() {
 
 }
 
+void Nave::naveTiempoDiferencial() {
+
+	tiempoActual = glfwGetTime();
+	tiempoDiferencial = tiempoActual - tiempoAnterior;
+
+}
+
 void Nave::rotar(Direccion direccion) {
 
 	float rotacion = velocidadAngular;
-	
+
 	if (direccion == Direccion::Derecha) {
 		rotacion = -rotacion;
 	}
 	angulo += rotacion;
+
 	actualizarMatrizTransformacion();
+}
+
+void Nave::naveRegreso() {
+
+	if (coordenadas.x > 1.2f) {
+		coordenadas.x -= 2.2;
+	}
+
+	else if (coordenadas.x < -1.2f) {
+		coordenadas.x += 2.2;
+	}
+
+	if (coordenadas.y > 1.2) {
+		coordenadas.y += -2.2;
+	}
+
+	else if (coordenadas.y < -1.2) {
+		coordenadas.y += 2.2;
+	}
 }
 
 void Nave::avanzar() {
 	float anguloDesfasado = angulo + 90.0f;
+
+
 	vec3 traslacion = vec3(
-		cos(anguloDesfasado * 3.14159 / 180.0f) * velocidadNormal, //X
-		sin(anguloDesfasado * 3.14159 / 180.0f) * velocidadNormal, //Y
+		cos(anguloDesfasado * 3.14159 / 180.0f) * velocidadNormal * tiempoDiferencial , //X
+		sin(anguloDesfasado * 3.14159 / 180.0f) * velocidadNormal * tiempoDiferencial , //Y
 		0.0f
 	);
 	coordenadas += traslacion;
@@ -58,3 +88,4 @@ void Nave::actualizarMatrizTransformacion() {
 	transformaciones = translate(transformaciones, coordenadas);
 	transformaciones = rotate(transformaciones, angulo * 3.14159f / 180.0f, vec3(0.0f, 0.0f, 1.0f));
 }
+
